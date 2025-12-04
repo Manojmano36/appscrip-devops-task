@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/Manojmano36/appscrip-devops-task.git
     targetRevision: main
-    path: k8s/home/manoj/eks-cluster/eks-cluster-with-terraform-main/manifests   # folder where deployment, service, ingress YAML exist
+    path: k8s/manifests   # folder where deployment, service, ingress YAML exist
 
   destination:
     server: https://kubernetes.default.svc
