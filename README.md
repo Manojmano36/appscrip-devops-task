@@ -1,4 +1,4 @@
-DevOps Assignment – AWS EKS + Terraform + ArgoCD + GitOps + NGINX
+🚀 DevOps Assignment – AWS EKS + Terraform + ArgoCD + GitOps + NGINX
 
 This project fully implements a production-grade Kubernetes environment on AWS using Infrastructure as Code (Terraform) and GitOps (ArgoCD).
 It satisfies all requirements in the assignment PDF and includes clear documentation for interview evaluation.
@@ -54,7 +54,7 @@ Any code change = automatic deployment to EKS
 ├── manifests/                # Application YAMLs
 │   ├── deployment.yaml
 │   ├── service.yaml
-│   └── ingress.yaml (optional - i am using nodeport)
+│   └── ingress.yaml (optional)
 │
 └── argocd/
     ├── application.yaml      # ArgoCD application
