@@ -254,3 +254,4 @@ argocd app sync myapp
 Rollback:
 
 argocd app rollback myapp <revision>
+[Click here to view the screenshot](./Screenshot_README.md)
