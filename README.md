@@ -5,64 +5,48 @@ It satisfies all requirements in the assignment PDF and includes clear documenta
 
 📌 **1. Architecture Overview**
 
-This project deploys:
+**This project deploys:**
 
-AWS Infrastructure (via Terraform)
+**AWS Infrastructure (via Terraform)**
 
-VPC (CIDR, public + private subnets, NAT, routing)
+**VPC (CIDR, public + private subnets, NAT, routing)**
 
-Internet Gateway + NAT Gateway
+**Internet Gateway + NAT Gateway**
 
-IAM Roles + Policies for:
+**IAM Roles + Policies for:**
 
-EKS Cluster
+**EKS Cluster**
 
-Node Groups
+**Node Groups**
 
-ALB Ingress Controller (AWSLoadBalancerControllerIAMPolicy)
+**ALB Ingress Controller (AWSLoadBalancerControllerIAMPolicy)**
 
-EKS Control Plane
+**EKS Control Plane**
 
-EKS Worker Node Groups
+**EKS Worker Node Groups**
 
-Kubernetes Layer
+**Kubernetes Layer**
 
 ArgoCD installation (GitOps engine)
 
-Application manifests (deployment, service, ingress)
+**Application manifests (deployment, service, ingress)**
 
-Auto-sync pipeline from GitHub
+**Auto-sync pipeline from GitHub**
 
-ALB Ingress Controller
+**ALB Ingress Controller**
 
-GitOps Workflow
+**GitOps Workflow**
 
-ArgoCD watches your Git repo
+**ArgoCD watches your Git repo**
 
-Any code change = automatic deployment to EKS
+**Any code change = automatic deployment to EKS**
 
-📁 2. Repository Structure
-├── main.tf                   # Terraform root module
-├── variables.tf
-├── outputs.tf
-├── terraform.tfvars
-│
-├── modules/
-│   ├── vpc/                  # VPC + Subnets + NAT + Routes
-│   └── eks/                  # IAM + OIDC + EKS Cluster + Node Groups
-│
-├── manifests/                # Application YAMLs
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   └── ingress.yaml (optional)
-│
-└── argocd/
-    ├── application.yaml      # ArgoCD application
-    └── argocd-ingress.yaml   # (Optional Ingress for ArgoCD)
+<img width="766" height="495" alt="image" src="https://github.com/user-attachments/assets/15e82ee0-56aa-4731-9c73-bff6a71304af" />
 
-🛑 Folders to Ignore / Not Commit
 
-Add these to .gitignore:
+🛑 **Folders to Ignore / Not Commit**
+
+**Add these to .gitignore:**
 
 .terraform/
 terraform.tfstate
@@ -70,7 +54,7 @@ terraform.tfstate.backup
 *.tfvars
 .terraform.lock.hcl
 
-🔧 3. Terraform – EKS Provisioning
+🔧 **3. Terraform – EKS Provisioning**
 Initialize:
 terraform init
 
@@ -83,7 +67,7 @@ terraform plan
 Apply:
 terraform apply -auto-approve
 
-🧠 4. IAM Permissions Used (VERY IMPORTANT FOR INTERVIEW)
+🧠 4. **IAM Permissions Used**
 ✔ IAM Role for EKS Cluster
 
 Attached policies:
@@ -92,7 +76,7 @@ AmazonEKSClusterPolicy
 
 AmazonEKSVPCResourceController
 
-✔ IAM Role for Worker Nodes
+✔ **IAM Role for Worker Nodes**
 
 Attached policies:
 
@@ -102,7 +86,7 @@ AmazonEKS_CNI_Policy
 
 AmazonEC2ContainerRegistryReadOnly
 
-✔ IAM Policy for AWS Load Balancer Controller
+✔ **IAM Policy for AWS Load Balancer Controller**
 
 File: iam_policy.json (FROM AWS documentation)
 Commands used:
@@ -116,7 +100,7 @@ aws iam create-policy \
   --policy-name AWSLoadBalancerControllerIAMPolicy \
   --policy-document file://iam_policy.json
 
-✔ IAM OIDC Provider
+✔ **IAM OIDC Provider**
 
 Required for assigning IAM roles to service accounts:
 
@@ -125,7 +109,7 @@ eksctl utils associate-iam-oidc-provider \
   --cluster demo-eks \
   --approve
 
-✔ IAM Service Account for ALB Controller
+✔ **IAM Service Account for ALB Controller**
 eksctl create iamserviceaccount \
   --cluster=demo-eks \
   --namespace=kube-system \
@@ -134,7 +118,7 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts \
   --approve
 
-📡 5. Configure kubectl
+📡 **5. Configure kubectl**
 aws eks update-kubeconfig --name demo-eks --region us-east-1
 
 
@@ -149,7 +133,7 @@ kubectl apply -n argocd \
   -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 
-Check:
+**Check:**
 
 kubectl get pods -n argocd
 
@@ -158,7 +142,7 @@ kubectl patch svc argocd-server -n argocd \
   -p '{"spec": {"type": "NodePort"}}'
 
 
-Get NodePort:
+**Get NodePort:**
 
 kubectl get svc -n argocd argocd-server
 
@@ -168,23 +152,23 @@ Login (port forwarding):
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 
-Open UI:
+**Open UI:**
 
 https://localhost:8080
 
 
-Get password:
+**Get password:**
 
 kubectl -n argocd get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d
 
-🚀 8. Deploy Application Using ArgoCD
+🚀 8. **Deploy Application Using ArgoCD**
 
 ArgoCD watches this repo:
 
 https://github.com/Manojmano36/appscrip-devops-task
 
-Your application file:
+**Your application file:**
 
 📄 argocd/application.yaml
 
@@ -192,17 +176,17 @@ repoURL: https://github.com/Manojmano36/appscrip-devops-task.git
 path: manifests
 
 
-Apply:
+**Apply:**
 
 kubectl apply -f argocd/application.yaml
 
 
-Check:
+**Check:**
 
 kubectl get applications -n argocd
 
 
-ArgoCD UI shows:
+**ArgoCD UI shows:**
 
 Synced
 
@@ -212,12 +196,12 @@ Pods running
 
 Service and Ingress created
 
-🌐 9. Access the NGINX Application
+🌐 **9. Access the NGINX Application**
 Option A — NodePort (Free)
 kubectl get svc nginx-service
 
 
-Open:
+**Open:**
 
 http://<node-ip>:30080
 
@@ -225,7 +209,7 @@ Option B — ALB Ingress
 kubectl get ingress nginx-ingress
 
 
-Open the ALB DNS name.
+**Open the ALB DNS name.**
 
 🧪 10. ArgoCD CLI Commands (For Interview)
 
@@ -236,22 +220,25 @@ sudo curl -sSL -o /usr/local/bin/argocd \
 sudo chmod +x /usr/local/bin/argocd
 
 
-Login:
+**Login:**
 
 argocd login localhost:8080 --username admin --password <pwd> --insecure
 
 
-Get app:
+**Get app:**
 
 argocd app get myapp
 
 
-Sync:
+**Sync:**
 
 argocd app sync myapp
 
 
-Rollback:
+**Rollback**:
 
 argocd app rollback myapp <revision>
-[Click here to view the screenshot](./Screenshot_README.md)
+
+> 📸 **Here attached My Output — [Click here to view the screenshot](./Screenshot_README.md)**  
+
+
